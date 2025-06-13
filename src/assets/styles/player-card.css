@@ -1,0 +1,338 @@
+/* Componente PlayerCard */
+.player-card {
+    background: white;
+    border-radius: var(--radius-lg);
+    padding: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    box-shadow: var(--shadow-sm);
+    border: 2px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .player-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--border-color);
+    transition: background 0.3s ease;
+  }
+  
+  .player-card.current-user {
+    border-color: var(--primary-color);
+    box-shadow: var(--shadow-md);
+  }
+  
+  .player-card.current-user::before {
+    background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+  }
+  
+  .player-card.current-turn {
+    border-color: var(--warning-color);
+    background: linear-gradient(135deg, #fff3cd, white);
+    animation: pulse-turn 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse-turn {
+    0%, 100% { transform: scale(1); box-shadow: var(--shadow-md); }
+    50% { transform: scale(1.02); box-shadow: var(--shadow-lg); }
+  }
+  
+  .player-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-md);
+  }
+  
+  /* Avatar del jugador */
+  .player-avatar {
+    position: relative;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto var(--spacing-md);
+    border: 3px solid white;
+    box-shadow: var(--shadow-sm);
+  }
+  
+  .player-icon {
+    font-size: 1.5rem;
+  }
+  
+  .turn-indicator {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    background: var(--warning-color);
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.7rem;
+    font-weight: bold;
+    animation: bounce 1s ease-in-out infinite;
+  }
+  
+  @keyframes bounce {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
+  }
+  
+  /* Información del jugador */
+  .player-info {
+    text-align: center;
+  }
+  
+  .player-name {
+    font-size: var(--font-size-base);
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: var(--spacing-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--spacing-xs);
+  }
+  
+  .you-label {
+    background: var(--primary-color);
+    color: white;
+    font-size: 0.7rem;
+    padding: 2px 6px;
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+  }
+  
+  /* Estadísticas del jugador */
+  .player-stats {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: var(--spacing-md);
+    gap: var(--spacing-xs);
+  }
+  
+  .stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex: 1;
+    padding: var(--spacing-xs);
+    background: var(--background-light);
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-color);
+  }
+  
+  .stat-icon {
+    font-size: 1rem;
+    margin-bottom: 2px;
+  }
+  
+  .stat-label {
+    font-size: 0.7rem;
+    color: var(--text-medium);
+    font-weight: 500;
+    margin-bottom: 2px;
+  }
+  
+  .stat-value {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+  
+  /* Barra de progreso */
+  .progress-bar {
+    position: relative;
+    height: 20px;
+    background: var(--border-color);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: var(--spacing-md);
+  }
+  
+  .progress-fill {
+    height: 100%;
+    background: var(--primary-color);
+    border-radius: 10px;
+    transition: width 0.5s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .progress-fill::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(255, 255, 255, 0.3),
+      transparent
+    );
+    animation: shimmer 2s infinite;
+  }
+  
+  @keyframes shimmer {
+    0% { transform: translateX(-100%); }
+    100% { transform: translateX(100%); }
+  }
+  
+  .progress-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    text-shadow: 0 0 2px white;
+    z-index: 2;
+  }
+  
+  /* Estado del jugador */
+  .player-status {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-xs);
+  }
+  
+  .status-badge {
+    font-size: 0.7rem;
+    padding: var(--spacing-xs) var(--spacing-sm);
+    border-radius: var(--radius-sm);
+    font-weight: 500;
+    text-align: center;
+    display: inline-block;
+  }
+  
+  .turn-badge {
+    background: var(--warning-color);
+    color: #856404;
+    animation: glow-turn 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes glow-turn {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+  }
+  
+  .effects-badge {
+    background: #e7e3ff;
+    color: #6f42c1;
+    border: 1px solid #d1c7f7;
+  }
+  
+  .winning-badge {
+    background: linear-gradient(45deg, #ffd700, #ffed4e);
+    color: #b8860b;
+    font-weight: 600;
+    border: 1px solid #f1c40f;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .player-card {
+      padding: var(--spacing-sm);
+    }
+    
+    .player-avatar {
+      width: 50px;
+      height: 50px;
+      margin-bottom: var(--spacing-sm);
+    }
+    
+    .player-icon {
+      font-size: 1.2rem;
+    }
+    
+    .turn-indicator {
+      width: 18px;
+      height: 18px;
+      font-size: 0.6rem;
+    }
+    
+    .player-name {
+      font-size: var(--font-size-sm);
+    }
+    
+    .stat {
+      padding: var(--spacing-xs);
+    }
+    
+    .stat-icon {
+      font-size: 0.9rem;
+    }
+    
+    .stat-label {
+      font-size: 0.6rem;
+    }
+    
+    .stat-value {
+      font-size: 0.7rem;
+    }
+    
+    .progress-bar {
+      height: 16px;
+    }
+    
+    .progress-text {
+      font-size: 0.6rem;
+    }
+    
+    .status-badge {
+      font-size: 0.6rem;
+      padding: 2px var(--spacing-xs);
+    }
+  }
+  
+  /* Estados especiales */
+  .player-card.inactive {
+    opacity: 0.7;
+  }
+  
+  .player-card.winner {
+    border-color: #ffd700;
+    background: linear-gradient(135deg, #fff9c4, white);
+  }
+  
+  .player-card.winner::before {
+    background: linear-gradient(90deg, #ffd700, #f39c12);
+  }
+  
+  .player-card.winner .player-avatar {
+    background: linear-gradient(135deg, #ffd700, #f39c12) !important;
+    animation: rotate 3s linear infinite;
+  }
+  
+  @keyframes rotate {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+  
+  /* Animaciones de entrada */
+  .player-card {
+    animation: slideInLeft 0.5s ease-out;
+  }
+  
+  @keyframes slideInLeft {
+    from {
+      opacity: 0;
+      transform: translateX(-20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateX(0);
+    }
+  }

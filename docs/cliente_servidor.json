@@ -1,0 +1,530 @@
+{
+    "ejemplos_cliente_servidor": [
+      {
+        "tipo": "Registro de usuario",
+        "descripcion": "Enviado por el cliente cuando un nuevo usuario se registra",
+        "request": {
+          "type": "REGISTER_USER",
+          "data": {
+            "username": "player1",
+            "email": "player1@ejemplo.com",
+            "password": "password_encriptado",
+            "avatar": "base64_encoded_image"
+          }
+        },
+        "response": {
+          "type": "REGISTER_RESPONSE",
+          "success": true,
+          "data": {
+            "userId": "12345",
+            "username": "player1",
+            "message": "Registro exitoso"
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Inicio de sesión",
+        "descripcion": "Enviado por el cliente para iniciar sesión",
+        "request": {
+          "type": "LOGIN",
+          "data": {
+            "username": "player1",
+            "password": "password_encriptado"
+          }
+        },
+        "response": {
+          "type": "LOGIN_RESPONSE",
+          "success": true,
+          "data": {
+            "userId": "12345",
+            "username": "player1",
+            "token": "jwt_token_authentication",
+            "avatar": "url_to_avatar"
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Creación de partida",
+        "descripcion": "Enviado por el cliente para crear una nueva partida",
+        "request": {
+          "type": "CREATE_GAME",
+          "data": {
+            "name": "Partida de Amparo",
+            "isPrivate": true,
+            "maxPlayers": 4,
+            "autoStart": false,
+            "waitTime": 600
+          }
+        },
+        "response": {
+          "type": "CREATE_GAME_RESPONSE",
+          "success": true,
+          "data": {
+            "gameId": "game789",
+            "inviteCode": "XYZABC",
+            "createdAt": "2025-05-07T15:30:00.000Z",
+            "ownerId": "12345"
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Unirse a partida",
+        "descripcion": "Enviado por el cliente para unirse a una partida existente",
+        "request": {
+          "type": "JOIN_GAME",
+          "data": {
+            "gameId": "game789",
+            "inviteCode": "XYZABC"
+          }
+        },
+        "response": {
+          "type": "JOIN_GAME_RESPONSE",
+          "success": true,
+          "data": {
+            "gameId": "game789",
+            "players": [
+              {
+                "userId": "12345",
+                "username": "player1",
+                "avatar": "url_to_avatar",
+                "isOwner": true,
+                "ready": true
+              },
+              {
+                "userId": "67890",
+                "username": "player2",
+                "avatar": "url_to_avatar",
+                "isOwner": false,
+                "ready": false
+              }
+            ],
+            "waitingForPlayers": true
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Iniciar partida",
+        "descripcion": "Enviado por el dueño de la partida para iniciarla",
+        "request": {
+          "type": "START_GAME",
+          "data": {
+            "gameId": "game789"
+          }
+        },
+        "response": {
+          "type": "GAME_STARTED",
+          "success": true,
+          "data": {
+            "gameId": "game789",
+            "startTime": "2025-05-07T15:35:00.000Z",
+            "firstTurnPlayerId": "12345",
+            "playerOrder": ["12345", "67890", "abcde", "fghij"],
+            "initialState": {
+              "board": {
+                "ladders": [
+                  {"from": 4, "to": 14},
+                  {"from": 9, "to": 31},
+                  {"from": 21, "to": 42},
+                  {"from": 28, "to": 84},
+                  {"from": 51, "to": 67},
+                  {"from": 72, "to": 91},
+                  {"from": 80, "to": 99}
+                ],
+                "snakes": [
+                  {"from": 17, "to": 7},
+                  {"from": 54, "to": 34},
+                  {"from": 62, "to": 19},
+                  {"from": 64, "to": 60},
+                  {"from": 87, "to": 36},
+                  {"from": 93, "to": 73},
+                  {"from": 95, "to": 75},
+                  {"from": 98, "to": 79}
+                ],
+                "specialSquares": [
+                  {"position": 6, "type": "coins", "value": 2},
+                  {"position": 20, "type": "freeCard", "value": 1},
+                  {"position": 33, "type": "skipTurn", "value": 1},
+                  {"position": 45, "type": "coins", "value": 3},
+                  {"position": 58, "type": "loseCoins", "value": 2},
+                  {"position": 69, "type": "coins", "value": 5},
+                  {"position": 83, "type": "freeCard", "value": 1}
+                ]
+              },
+              "players": [
+                {
+                  "userId": "12345",
+                  "position": 1,
+                  "coins": 5,
+                  "cards": []
+                },
+                {
+                  "userId": "67890",
+                  "position": 1,
+                  "coins": 5,
+                  "cards": []
+                },
+                {
+                  "userId": "abcde",
+                  "position": 1,
+                  "coins": 5,
+                  "cards": []
+                },
+                {
+                  "userId": "fghij",
+                  "position": 1,
+                  "coins": 5,
+                  "cards": []
+                }
+              ]
+            }
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Lanzamiento de dado",
+        "descripcion": "Enviado por el cliente para lanzar el dado en su turno",
+        "request": {
+          "type": "ROLL_DICE",
+          "data": {
+            "gameId": "game789",
+            "userId": "12345"
+          }
+        },
+        "response": {
+          "type": "DICE_RESULT",
+          "success": true,
+          "data": {
+            "gameId": "game789",
+            "userId": "12345",
+            "diceValue": 4,
+            "oldPosition": 1,
+            "newPosition": 5,
+            "events": [],
+            "nextTurn": {
+              "userId": "67890",
+              "username": "player2"
+            }
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Lanzamiento de dado con eventos",
+        "descripcion": "Ejemplo de lanzamiento con eventos (escalera, monedas, etc.)",
+        "request": {
+          "type": "ROLL_DICE",
+          "data": {
+            "gameId": "game789",
+            "userId": "67890"
+          }
+        },
+        "response": {
+          "type": "DICE_RESULT",
+          "success": true,
+          "data": {
+            "gameId": "game789",
+            "userId": "67890",
+            "diceValue": 3,
+            "oldPosition": 1,
+            "intermediatePosition": 4,
+            "newPosition": 14,
+            "events": [
+              {
+                "type": "LADDER",
+                "from": 4,
+                "to": 14,
+                "message": "¡Has subido por una escalera!"
+              }
+            ],
+            "nextTurn": {
+              "userId": "abcde",
+              "username": "player3"
+            }
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Compra de carta",
+        "descripcion": "Enviado por el cliente para comprar una carta especial",
+        "request": {
+          "type": "BUY_CARD",
+          "data": {
+            "gameId": "game789",
+            "userId": "12345"
+          }
+        },
+        "response": {
+          "type": "BUY_CARD_RESPONSE",
+          "success": true,
+          "data": {
+            "gameId": "game789",
+            "userId": "12345",
+            "card": {
+              "id": "card123",
+              "type": "DOUBLE_DICE",
+              "name": "Doble Dado",
+              "description": "Te permite lanzar 2 dados en tu próximo turno"
+            },
+            "coinsSpent": 3,
+            "remainingCoins": 2
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Uso de carta especial",
+        "descripcion": "Enviado por el cliente para usar una carta especial",
+        "request": {
+          "type": "USE_CARD",
+          "data": {
+            "gameId": "game789",
+            "userId": "12345",
+            "cardId": "card123",
+            "targetUserId": "67890"
+          }
+        },
+        "response": {
+          "type": "USE_CARD_RESPONSE",
+          "success": true,
+          "data": {
+            "gameId": "game789",
+            "userId": "12345",
+            "cardId": "card123",
+            "cardType": "SWAP_POSITION",
+            "targetUserId": "67890",
+            "effect": {
+              "type": "POSITION_SWAP",
+              "oldPositionUser": 14,
+              "oldPositionTarget": 31,
+              "newPositionUser": 31,
+              "newPositionTarget": 14
+            },
+            "message": "¡Player1 ha intercambiado posiciones con Player2!"
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Actualización de estado",
+        "descripcion": "Enviado por el servidor para actualizar el estado completo del juego",
+        "broadcast": {
+          "type": "GAME_STATE_UPDATE",
+          "data": {
+            "gameId": "game789",
+            "timestamp": "2025-05-07T15:40:30.000Z",
+            "currentTurn": {
+              "userId": "abcde",
+              "username": "player3",
+              "timeRemaining": 30
+            },
+            "players": [
+              {
+                "userId": "12345",
+                "username": "player1",
+                "position": 31,
+                "coins": 2,
+                "cards": []
+              },
+              {
+                "userId": "67890",
+                "username": "player2",
+                "position": 14,
+                "coins": 5,
+                "cards": [
+                  {
+                    "id": "card456",
+                    "type": "SKIP_SNAKE",
+                    "name": "Saltar Serpiente",
+                    "description": "Te permite evitar caer por una serpiente en tu próximo turno"
+                  }
+                ]
+              },
+              {
+                "userId": "abcde",
+                "username": "player3",
+                "position": 6,
+                "coins": 7,
+                "cards": []
+              },
+              {
+                "userId": "fghij",
+                "username": "player4",
+                "position": 1,
+                "coins": 5,
+                "cards": []
+              }
+            ],
+            "gameStatus": "IN_PROGRESS",
+            "turnNumber": 3,
+            "lastAction": {
+              "type": "USE_CARD",
+              "userId": "12345",
+              "cardType": "SWAP_POSITION",
+              "targetUserId": "67890",
+              "timestamp": "2025-05-07T15:40:15.000Z"
+            }
+          }
+        }
+      },
+      {
+        "tipo": "Fin de partida",
+        "descripcion": "Enviado por el servidor cuando un jugador gana la partida",
+        "broadcast": {
+          "type": "GAME_OVER",
+          "data": {
+            "gameId": "game789",
+            "winner": {
+              "userId": "67890",
+              "username": "player2"
+            },
+            "endTime": "2025-05-07T16:15:45.000Z",
+            "gameDuration": 2445,
+            "finalPositions": [
+              {
+                "userId": "67890",
+                "username": "player2",
+                "position": 100,
+                "place": 1
+              },
+              {
+                "userId": "12345",
+                "username": "player1",
+                "position": 87,
+                "place": 2
+              },
+              {
+                "userId": "abcde",
+                "username": "player3",
+                "position": 74,
+                "place": 3
+              },
+              {
+                "userId": "fghij",
+                "username": "player4",
+                "position": 56,
+                "place": 4
+              }
+            ],
+            "statistics": {
+              "totalTurns": 42,
+              "laddersClimbed": 15,
+              "snakesFallen": 8,
+              "cardsUsed": 6
+            }
+          }
+        }
+      },
+      {
+        "tipo": "Error de validación",
+        "descripcion": "Respuesta del servidor cuando hay un error",
+        "request": {
+          "type": "ROLL_DICE",
+          "data": {
+            "gameId": "game789",
+            "userId": "12345"
+          }
+        },
+        "response": {
+          "type": "ERROR",
+          "success": false,
+          "data": null,
+          "error": {
+            "code": "NOT_YOUR_TURN",
+            "message": "No es tu turno para lanzar el dado"
+          }
+        }
+      },
+      {
+        "tipo": "Notificación de abandono",
+        "descripcion": "Enviado por el servidor cuando un jugador abandona la partida",
+        "broadcast": {
+          "type": "PLAYER_LEFT",
+          "data": {
+            "gameId": "game789",
+            "userId": "fghij",
+            "username": "player4",
+            "reason": "DISCONNECT",
+            "timestamp": "2025-05-07T16:00:15.000Z",
+            "gameStatus": "IN_PROGRESS",
+            "nextTurn": {
+              "userId": "12345",
+              "username": "player1"
+            }
+          }
+        }
+      },
+      {
+        "tipo": "Heartbeat",
+        "descripcion": "Enviado periódicamente para verificar la conexión",
+        "request": {
+          "type": "HEARTBEAT",
+          "data": {
+            "userId": "12345",
+            "timestamp": "2025-05-07T15:45:30.000Z"
+          }
+        },
+        "response": {
+          "type": "HEARTBEAT_RESPONSE",
+          "success": true,
+          "data": {
+            "timestamp": "2025-05-07T15:45:30.123Z",
+            "activeGames": 1
+          },
+          "error": null
+        }
+      },
+      {
+        "tipo": "Mensaje de chat",
+        "descripcion": "Enviado por el cliente para comunicarse con otros jugadores",
+        "request": {
+          "type": "CHAT_MESSAGE",
+          "data": {
+            "gameId": "game789",
+            "userId": "12345",
+            "message": "¡Buena suerte a todos!",
+            "timestamp": "2025-05-07T15:38:12.000Z"
+          }
+        },
+        "broadcast": {
+          "type": "CHAT_UPDATE",
+          "data": {
+            "gameId": "game789",
+            "messages": [
+              {
+                "userId": "12345",
+                "username": "player1",
+                "message": "¡Buena suerte a todos!",
+                "timestamp": "2025-05-07T15:38:12.000Z"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "tipo": "Distribución de carta automática",
+        "descripcion": "Enviado por el servidor cuando un jugador recibe una carta cada 3 turnos",
+        "broadcast": {
+          "type": "CARD_DISTRIBUTION",
+          "data": {
+            "gameId": "game789",
+            "userId": "abcde",
+            "username": "player3",
+            "card": {
+              "id": "card789",
+              "type": "RETURN_TURN",
+              "name": "Retroceder Turno",
+              "description": "Hace que un jugador seleccionado pierda su próximo turno"
+            },
+            "reason": "TURN_REWARD",
+            "message": "¡Player3 ha recibido una carta de recompensa por completar 3 turnos!"
+          }
+        }
+      }
+    ]
+  }

@@ -1,0 +1,401 @@
+/* Componente GameBoard */
+.game-board {
+  background: white;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-md);
+  border-bottom: 2px solid var(--border-color);
+}
+
+.board-header h3 {
+  margin: 0;
+  color: var(--primary-color);
+  font-size: var(--font-size-xl);
+  font-weight: 600;
+}
+
+.dice-animation {
+  background: var(--warning-color);
+  color: #856404;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: var(--font-size-sm);
+  animation: pulse 1s ease-in-out infinite;
+}
+
+/* Grilla del tablero */
+.board-grid {
+  display: grid;
+  grid-template-rows: repeat(10, 1fr);
+  gap: 2px;
+  background: var(--border-color);
+  border-radius: var(--radius-md);
+  padding: 2px;
+  margin-bottom: var(--spacing-lg);
+  aspect-ratio: 1;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.board-row {
+  display: grid;
+  grid-template-columns: repeat(10, 1fr);
+  gap: 2px;
+}
+
+/* Casillas del tablero */
+.board-cell {
+  background: white;
+  border-radius: var(--radius-sm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  aspect-ratio: 1;
+  min-height: 40px;
+  overflow: hidden;
+}
+
+.board-cell:hover {
+  transform: scale(1.05);
+  z-index: 10;
+  box-shadow: var(--shadow-md);
+}
+
+.board-cell.highlighted {
+  background: var(--warning-color);
+  animation: highlight-pulse 1s ease-in-out infinite;
+  transform: scale(1.1);
+  z-index: 20;
+}
+
+@keyframes highlight-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Tipos de casillas */
+.board-cell.start {
+  background: linear-gradient(135deg, #2ecc71, #27ae60);
+  color: white;
+}
+
+.board-cell.finish {
+  background: linear-gradient(135deg, #f39c12, #e67e22);
+  color: white;
+  font-weight: bold;
+}
+
+.board-cell.ladder-start {
+  background: linear-gradient(135deg, #3498db, #2980b9);
+  color: white;
+}
+
+.board-cell.ladder-end {
+  background: linear-gradient(135deg, #87ceeb, #4682b4);
+  color: white;
+}
+
+.board-cell.snake-head {
+  background: linear-gradient(135deg, #e74c3c, #c0392b);
+  color: white;
+}
+
+.board-cell.snake-tail {
+  background: linear-gradient(135deg, #ff7675, #d63031);
+  color: white;
+}
+
+/* Contenido de las casillas */
+.cell-number {
+  font-size: 0.7rem;
+  font-weight: 600;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  z-index: 2;
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 2px;
+  padding: 1px 3px;
+  line-height: 1;
+}
+
+.board-cell.start .cell-number,
+.board-cell.finish .cell-number,
+.board-cell.ladder-start .cell-number,
+.board-cell.ladder-end .cell-number,
+.board-cell.snake-head .cell-number,
+.board-cell.snake-tail .cell-number {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+}
+
+.cell-icon {
+  font-size: 1rem;
+  z-index: 2;
+}
+
+/* Jugadores en las casillas */
+.players-here {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  z-index: 5;
+}
+
+.player-token {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: bold;
+  border: 2px solid white;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition: all 0.2s ease;
+}
+
+.player-token.current-user {
+  background: var(--secondary-color);
+  animation: player-glow 2s ease-in-out infinite;
+}
+
+@keyframes player-glow {
+  0%, 100% { box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3); }
+  50% { box-shadow: 0 0 8px var(--secondary-color); }
+}
+
+.player-token:hover {
+  transform: scale(1.2);
+  z-index: 10;
+}
+
+/* Tooltips */
+.cell-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--text-dark);
+  color: white;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  z-index: 15;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+
+.board-cell:hover .cell-tooltip {
+  opacity: 1;
+}
+
+.cell-tooltip::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 4px solid transparent;
+  border-top-color: var(--text-dark);
+}
+
+/* Leyenda */
+.board-legend {
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-lg);
+  flex-wrap: wrap;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-sm);
+  color: var(--text-medium);
+  background: var(--background-light);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-color);
+}
+
+.legend-icon {
+  font-size: 1rem;
+}
+
+.player-token-example {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--primary-color);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.6rem;
+  font-weight: bold;
+  border: 1px solid white;
+}
+
+/* Información del tablero */
+.board-info {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-lg);
+  border-top: 1px solid var(--border-color);
+  padding-top: var(--spacing-lg);
+}
+
+.info-section h4 {
+  margin: 0 0 var(--spacing-sm);
+  color: var(--primary-color);
+  font-size: var(--font-size-base);
+  font-weight: 600;
+}
+
+.info-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}
+
+.info-item {
+  background: var(--background-light);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-sm);
+  font-size: 0.7rem;
+  font-weight: 500;
+  border: 1px solid var(--border-color);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .game-board {
+    padding: var(--spacing-md);
+  }
+  
+  .board-header {
+    flex-direction: column;
+    gap: var(--spacing-sm);
+    align-items: center;
+  }
+  
+  .board-grid {
+    max-width: 350px;
+  }
+  
+  .board-cell {
+    min-height: 30px;
+  }
+  
+  .cell-number {
+    font-size: 0.6rem;
+  }
+  
+  .cell-icon {
+    font-size: 0.8rem;
+  }
+  
+  .player-token {
+    width: 14px;
+    height: 14px;
+    font-size: 0.5rem;
+  }
+  
+  .board-legend {
+    gap: var(--spacing-md);
+  }
+  
+  .legend-item {
+    font-size: 0.7rem;
+  }
+  
+  .board-info {
+    grid-template-columns: 1fr;
+    gap: var(--spacing-md);
+  }
+}
+
+@media (max-width: 480px) {
+  .board-grid {
+    max-width: 280px;
+  }
+  
+  .board-cell {
+    min-height: 25px;
+  }
+  
+  .cell-number {
+    font-size: 0.5rem;
+    padding: 0 2px;
+  }
+  
+  .cell-icon {
+    font-size: 0.7rem;
+  }
+  
+  .player-token {
+    width: 12px;
+    height: 12px;
+    font-size: 0.4rem;
+    border-width: 1px;
+  }
+  
+  .board-legend {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .cell-tooltip {
+    font-size: 0.6rem;
+    padding: 2px var(--spacing-xs);
+  }
+}
+
+/* Animaciones especiales */
+@keyframes cell-activate {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+  100% { transform: scale(1); }
+}
+
+.board-cell.activated {
+  animation: cell-activate 0.5s ease-in-out;
+}
+
+/* Efectos de hover mejorados */
+.board-cell.ladder-start:hover,
+.board-cell.ladder-end:hover {
+  background: linear-gradient(135deg, #5dade2, #3498db);
+}
+
+.board-cell.snake-head:hover,
+.board-cell.snake-tail:hover {
+  background: linear-gradient(135deg, #ec7063, #e74c3c);
+}
